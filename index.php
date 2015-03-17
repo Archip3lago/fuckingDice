@@ -2,6 +2,28 @@
 <?php
 $diceOutput = "";
 
+require_once 'Dice.php';
+
+$diceSides = 6;
+$diceAmount = 2;
+
+if(isset($_GET["sidor"]) and isset($_GET["antal"])){
+    $diceSides = (int) filter_input(INPUT_GET, 'sidor', FILTER_SANITIZE_SPECIAL_CHARS);
+    $diceAmount = (int) filter_input(INPUT_GET, 'antal', FILTER_SANITIZE_SPECIAL_CHARS);
+}
+
+$dice = new Dice($diceSides);
+$diceResults = $dice->rollDice($diceAmount);
+
+function diceList($results){
+    $diceOutput = "<ol>";
+    foreach($results as $result){
+        $diceOutput .= "<li>" . $result . "</li>";
+    }
+    $diceOutput .= "</ol>";
+    return $diceOutput;
+}
+
 ?>
 <html>
     <head>
@@ -10,27 +32,22 @@ $diceOutput = "";
     </head>
     <body>
         <form method="GET">
-            Antal Tärningar:
-            <select name="diceAmount">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
+            <input type="number" name="antal" placeholder="Antal tärningar">
             <br>
-            Sidor på tärning:
-            <select name="diceSides">
-                <option value="4">4</option>
-                <option value="6">6</option>
-                <option value="8">8</option>
-                <option value="12">12</option>
-                <option value="20">20</option>
-            </select>
+            <input type="number" name="sidor" placeholder="Antal sidor">
             <br>
             <input type="submit" name="rollDice" value="Rulla tärningsjävlarna">
         </form>  
+        
+        <ul>
+            <li>Antal sidor på tärningen: <?php echo $diceResults["sides"] ?></li>
+            <li>Antal sidor på tärningen: <?php echo $diceResults["amount"] ?></li>
+            <li>Antal sidor på tärningen: <?php echo $diceResults["sum"] ?></li>
+            <li>
         <?php
-            echo $diceOutput;
+            echo diceList($diceResults["dice"]);
         ?>
+        </li>
+        </ul>
     </body>
 </html>
