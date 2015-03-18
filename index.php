@@ -7,8 +7,11 @@ require_once 'Dice.php';
 $diceSides = 6;
 $diceAmount = 2;
 
-if(isset($_GET["sidor"]) and isset($_GET["antal"])){
+
+if(isset($_GET["sidor"]) and $_GET["sidor"] != null){
     $diceSides = (int) filter_input(INPUT_GET, 'sidor', FILTER_SANITIZE_SPECIAL_CHARS);
+}
+if(isset($_GET["antal"]) and $_GET["antal"] != null){
     $diceAmount = (int) filter_input(INPUT_GET, 'antal', FILTER_SANITIZE_SPECIAL_CHARS);
 }
 
@@ -41,8 +44,8 @@ function diceList($results){
         
         <ul>
             <li>Antal sidor på tärningen: <?php echo $diceResults["sides"] ?></li>
-            <li>Antal sidor på tärningen: <?php echo $diceResults["amount"] ?></li>
-            <li>Antal sidor på tärningen: <?php echo $diceResults["sum"] ?></li>
+            <li>Antal tärningar: <?php echo $diceResults["amount"] ?></li>
+            <li>Summa av tärningarna: <?php echo $diceResults["sum"] ?></li>
             <li>
         <?php
             echo diceList($diceResults["dice"]);
